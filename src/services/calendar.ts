@@ -1,4 +1,4 @@
-import ical, { ICalCalendarMethod } from 'ical-generator';
+import ical from 'ical-generator';
 
 import { episodeSchema } from './show';
 
@@ -6,8 +6,6 @@ const oneHourMs = 3_600_000
 
 export function buildCalendar(episodes: episodeSchema): string{
   const calendar = ical({ name: 'Tv shows' });
-
-  calendar.method(ICalCalendarMethod.REQUEST);
 
   episodes.forEach(episode => {
     const startTime = new Date(episode.airstamp);
@@ -17,7 +15,7 @@ export function buildCalendar(episodes: episodeSchema): string{
         id: episode.id,
         start: startTime,
         end: endTime,
-        description: `${episode.showName} - ${episode.episode}`,
+        summary: `${episode.showName} - ${episode.episode}`
     });
   })
 
