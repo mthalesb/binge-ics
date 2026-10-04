@@ -2,6 +2,7 @@ import { z } from 'zod'
 import { ApiError, InvalidResponseError } from '../errors'
 
 const url = "https://api.tvmaze.com";
+const cacheTtlSeconds = 3_600;
 
 const showSchema = z.object({
   show: z.object({
@@ -16,6 +17,7 @@ const showSchema = z.object({
 }))
 
 const episodeSchema = z.object({
+  id: z.number(),
   name: z.string(),
   season: z.number(),
   number: z.number(),
@@ -26,6 +28,7 @@ const episodeSchema = z.object({
     })
   })
 }).transform((episode) => ({
+  id: episode.id,
   showName: episode._links.show.name,
   episodeName: episode.name,
   episode: `S${String(episode.season).padStart(2, '0')}E${String(episode.number).padStart(2, '0')}`,
@@ -41,7 +44,7 @@ export type showSearchResult = z.infer<typeof searchResultSchema>
 export type episodeSchema = z.infer<typeof episodeResultSchema>
 
 export async function searchShow(showName: string): Promise<showSearchResult> {
-  const res = await fetch(`${url}/search/shows?q=${showName}`)
+  const res = await fetch(`${url}/search/shows?q=${showName}`, { cf: {cacheTtl: cacheTtlSeconds}})
 
   if (!res.ok) throw new ApiError(`TV API error: ${res.status}`)
 
@@ -54,14 +57,19 @@ export async function searchShow(showName: string): Promise<showSearchResult> {
   return shows.data
 }
 
-export async function getShowEpisodes(showId: string){
-  const res = await fetch(`${url}/shows/${showId}/episodes`)
+export async function getShowsEpisodes(showIds: string) {
+  const ids = showIds.split(",")
+  const uniqueIds = [...new Set(ids)]
 
-  if (!res.ok) throw new ApiError(`TV API error: ${res.status}`)
+  const data = await Promise.all(uniqueIds.map(async id => {
+    const res = await fetch(`${url}/shows/${id}/episodes`, { cf: { cacheTtl: cacheTtlSeconds } })
 
-  const data = await res.json()
+    if (!res.ok) throw new ApiError(`TV API error: ${res.status}`)
 
-  const episodes = episodeResultSchema.safeParse(data)
+    return await res.json()
+  }))
+
+  const episodes = episodeResultSchema.safeParse(data.flat())
 
   if(!episodes.success) throw new InvalidResponseError()
 
