@@ -64,7 +64,7 @@ export async function getShowsEpisodes(showIds: string) {
   const ids = showIds.split(",")
   const uniqueIds = [...new Set(ids)]
 
-  if (uniqueIds.length > showsLimit) throw new BadRequestError(`Too many shows (max ${showsLimit}))
+  if (uniqueIds.length > showsLimit) throw new BadRequestError(`Too many shows (max ${showsLimit}`)
 
   const data = await Promise.all(uniqueIds.map(async id => {
     const res = await fetch(`${url}/shows/${id}/episodes`, { cf: { cacheTtl: cacheTtlSeconds } })
