@@ -1,5 +1,6 @@
 import { Hono } from 'hono'
 import { logger } from 'hono/logger'
+import { cors } from 'hono/cors'
 
 const app = new Hono()
 
@@ -8,6 +9,7 @@ import { buildCalendar } from './services/calendar'
 import { AppError, BadRequestError } from './errors'
 
 app.use(logger())
+app.use(cors())
 
 app.get('/shows/:showName', async (c) => {
   const { showName } = c.req.param();
