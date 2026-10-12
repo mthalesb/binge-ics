@@ -1,32 +1,35 @@
 {
-  "name": "binge-ics",
-  "version": "1.0.0",
-  "description": "",
-  "main": "index.js",
-  "scripts": {
-    "deploy": "wrangler deploy",
-    "dev": "wrangler dev"
-  },
-  "keywords": [],
-  "author": "",
-  "license": "ISC",
-  "devEngines": {
-    "packageManager": {
-      "name": "pnpm",
-      "version": "12.6.0",
-      "onFail": "download"
-    }
-  },
-  "packageManager": "pnpm@12.6.0",
-  "type": "module",
-  "dependencies": {
-    "hono": "^4.13.9",
-    "ical-generator": "^11.1.1",
-    "zod": "^4.6.5"
-  },
-  "devDependencies": {
-    "@cloudflare/workers-types": "^5.20260926.1",
-    "typescript": "^7.0.2",
-    "wrangler": "^4.141.0"
-  }
+	"name": "binge-ics",
+	"version": "1.0.0",
+	"description": "",
+	"main": "index.js",
+	"scripts": {
+		"deploy": "wrangler deploy",
+		"dev": "wrangler dev",
+		"format": "biome format --write .",
+		"lint": "biome lint ."
+	},
+	"keywords": [],
+	"author": "",
+	"license": "ISC",
+	"devEngines": {
+		"packageManager": {
+			"name": "pnpm",
+			"version": "12.6.0",
+			"onFail": "download"
+		}
+	},
+	"packageManager": "pnpm@12.6.0",
+	"type": "module",
+	"dependencies": {
+		"hono": "^4.13.9",
+		"ical-generator": "^11.1.1",
+		"zod": "^4.6.5"
+	},
+	"devDependencies": {
+		"@biomejs/biome": "2.5.15",
+		"@cloudflare/workers-types": "^5.20260926.1",
+		"typescript": "^7.0.2",
+		"wrangler": "^4.141.0"
+	}
 }

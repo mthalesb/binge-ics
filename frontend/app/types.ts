@@ -1,1 +1,1 @@
-export type Show = { id: number; name: string; premiered: string };
+export type Show = { id: number; name: string; premiered: string }
