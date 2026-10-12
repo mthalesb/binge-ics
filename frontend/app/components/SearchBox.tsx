@@ -39,7 +39,7 @@ export function SearchBox({ full, onAdd }: Props) {
         className="w-full border-b-2 border-current bg-transparent py-3 text-lg outline-none placeholder:opacity-50 focus:border-accent disabled:opacity-50"
       />
       {isFetching && (
-        <span className="absolute right-0 top-4 animate-pulse text-xs opacity-50">
+        <span className="absolute right-0 top-3 animate-pulse text-xl opacity-50">
           …
         </span>
       )}
